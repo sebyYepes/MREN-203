@@ -12,22 +12,22 @@
 /* PIN CONNECTIONS */
 
 // Left wheel PWM control
-int EB = 5; // Wheel PWM pin (must be a PWM pin)
-int I3 = 3; // Wheel direction digital pin 1
-int I4 = 4; // Wheel direction digital pin 2
+int EB = 9; // Wheel PWM pin (must be a PWM pin)
+int I3 = 8; // Wheel direction digital pin 1
+int I4 = 10; // Wheel direction digital pin 2
 
 // Right wheel PWM control
-int EA = 6; // Wheel PWM pin (must be a PWM pin)
-int I1 = 8; // Wheel direction digital pin 1
-int I2 = 7; // Wheel direction digital pin 2
+int EA = 3; // Wheel PWM pin (must be a PWM pin)
+int I1 = 2; // Wheel direction digital pin 1
+int I2 = 4; // Wheel direction digital pin 2
 
 // Left wheel encoder digital pins
 const byte SIGNAL_AL = 11; // green wire
 const byte SIGNAL_BL = 12; // yellow wire
 
 // Right wheel encoder digital pins
-const byte SIGNAL_AR = 9;  // green wire
-const byte SIGNAL_BR = 10; // yellow wire
+const byte SIGNAL_AR = 6;  // green wire
+const byte SIGNAL_BR = 5; // yellow wire
 
 /* USEFUL CONSTANTS */
 
@@ -44,8 +44,8 @@ const double ELL = 0.2775;
 const int T = 100;
 
 // Controller gains (use the same values for both wheels)
-const double KP = 180.0; // Proportional gain
-const double KI = 100.0; // Integral gain
+const double KP = 150.0; // Proportional gain
+const double KI = 0.0; // Integral gain
 
 /* VARIABLE DECLARATIONS */
 
