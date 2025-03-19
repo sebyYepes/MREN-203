@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <urmom.h>
 // Wheel PWM pin (must be a PWM pin)
 int EA = 3;
 int EB = 9;
@@ -10,7 +11,7 @@ int I4 = 9;
 // Motor PWM command variable [0-255]
 byte u = 0;
 
-void setup() {
+void setupMotors() {
   // put your setup code here, to run once:
   
     // Configure digital pins for output
@@ -23,7 +24,7 @@ void setup() {
 
 }
 
-void loop() {
+void moveForward() {
   // put your main code here, to run repeatedly:
   // go straight
   digitalWrite(I1, LOW);
