@@ -6,5 +6,6 @@
 void setupMotors();
 void moveForward(int speed);
 void reverse(int speed);
+void stop();
 
 #endif
