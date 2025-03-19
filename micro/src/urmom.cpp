@@ -27,15 +27,23 @@ void setupMotors() {
 void moveForward(int speed) {
   // put your main code here, to run repeatedly:
   // go straight
-  digitalWrite(I1, LOW);
-  digitalWrite(I2, HIGH);
+  digitalWrite(I1, HIGH);
+  digitalWrite(I2, LOW);
   digitalWrite(I3, LOW);
   digitalWrite(I4, HIGH);
 
   analogWrite(EA, speed);
   analogWrite(EB, speed);
+}
 
-  delay(3000);
+void reverse(int speed) {
+  digitalWrite(I1, LOW);
+  digitalWrite(I2, HIGH);
+  digitalWrite(I3, HIGH);
+  digitalWrite(I4, LOW);
+
+  analogWrite(EA, speed);
+  analogWrite(EB, speed);
 }
 
 // first test upload by seb
