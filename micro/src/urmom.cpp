@@ -46,4 +46,8 @@ void reverse(int speed) {
   analogWrite(EB, speed);
 }
 
+void stop(){
+  analogWrite(EA, 0);
+  analogWrite(EB, 0);
+}
 // first test upload by seb
