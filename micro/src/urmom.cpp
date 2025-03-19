@@ -24,7 +24,7 @@ void setupMotors() {
 
 }
 
-void moveForward() {
+void moveForward(int speed) {
   // put your main code here, to run repeatedly:
   // go straight
   digitalWrite(I1, LOW);
@@ -32,8 +32,8 @@ void moveForward() {
   digitalWrite(I3, LOW);
   digitalWrite(I4, HIGH);
 
-  analogWrite(EA, 255);
-  analogWrite(EB, 255);
+  analogWrite(EA, speed);
+  analogWrite(EB, speed);
 
   delay(3000);
 }
