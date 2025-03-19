@@ -4,6 +4,7 @@
 #include <Arduino>
 
 void setupMotors();
-void moveForward(int speed):
+void moveForward(int speed);
+void reverse(int speed);
 
 #endif
