@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <urmom.h>
 // Wheel PWM pin (must be a PWM pin)
 int EA = 3;
@@ -7,7 +6,7 @@ int EB = 9;
 int I1 = 2;
 int I2 = 4;
 int I3 = 8;
-int I4 = 9;
+int I4 = 10;
 // Motor PWM command variable [0-255]
 byte u = 0;
 
