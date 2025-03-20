@@ -6,8 +6,12 @@ void setup(){
 }
 
 void loop(){
-    readirData(frontDistance, leftDistance, rightDistance)
-    if(threshold_distance > frontDistance || threshold_distance > leftD>        stop();
+
+    int frontDistance, leftDistance, rightDistance;
+
+    readirData(frontDistance, leftDistance, rightDistance);
+    if(threshold_distance > frontDistance || threshold_distance > leftD>        
+        stop();
         delay(5000);
     }
     else{
