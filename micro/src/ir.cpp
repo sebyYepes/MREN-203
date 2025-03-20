@@ -13,7 +13,7 @@ int sharp_val_L = 0;
 int sharp_val_R = 0;
 
 float sharp_range; // range measurement [cm]
-int threshold_distance = 15
+int threshold_distance = 15;
 
 void setupSerial()
 {
@@ -39,9 +39,9 @@ void readirData(int &distance, int &distance_L, int &distance_R)
     sum_F /= 20; 
     sum_L /= 20; 
     sum_R /= 20; 
-    int distance = 149.72*exp(-0.005*sum_F);
-    int distance_L = 149.72*exp(-0.005*sum_L);
-    int distance_R = 149.72*exp(-0.005*sum_R);
+    distance = 149.72*exp(-0.005*sum_F);
+    distance_L = 149.72*exp(-0.005*sum_L);
+    distance_R = 149.72*exp(-0.005*sum_R);
 
 
     // serial prints, prolly dont need
