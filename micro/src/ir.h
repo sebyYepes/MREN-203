@@ -4,6 +4,6 @@
 #include <Arduino.h>
 extern int threshold_distance;
 void setupSerial();
-void readirData();
+void readirData(int &distance, int &distance_L, int &distance_R);
 
 #endif 
