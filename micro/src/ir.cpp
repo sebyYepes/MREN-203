@@ -13,12 +13,13 @@ int sharp_val_L = 0;
 int sharp_val_R = 0;
 
 float sharp_range; // range measurement [cm]
-int threshold_distance = 15;
+int threshold_distance = 30;
 
 void setupSerial()
 {
     // Open the serial port at 115200 bps
-    Serial.begin(115200);
+    Serial.begin(115200);  // Look at this value
+    Serial.println("Serial Initialized!"); // Debugging message
 }
 
 void readirData(int &distance, int &distance_L, int &distance_R)

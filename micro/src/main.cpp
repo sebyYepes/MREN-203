@@ -3,10 +3,16 @@
 
 void setup(){
     setupMotors();
+    Serial.begin(115200);
+    Serial.println("Testing motors...");
+
+    moveForward(150);
+    delay(3000);
+    stop();
 }
 
 void loop(){
-    int frontDistance, leftDistance, rightDistance;
+        int frontDistance, leftDistance, rightDistance;
 
     readirData(frontDistance, leftDistance, rightDistance);
 

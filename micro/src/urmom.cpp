@@ -46,6 +46,11 @@ void reverse(int speed) {
 }
 
 void stop(){
+  digitalWrite(I1, LOW);
+  digitalWrite(I2, LOW);
+  digitalWrite(I3, LOW);
+  digitalWrite(I4, LOW);
+
   analogWrite(EA, 0);
   analogWrite(EB, 0);
 }
