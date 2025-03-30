@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <stdlib.h> //for atoi
 
 char recvchars[32];
 bool newdata = false;
@@ -58,7 +59,37 @@ int* recieveData()
         }
     }
     //write a function to parse the data and convert the numbers in the string to integers
-    
+    int vals[] = parseData(recvchars, ndx);
 
-    return recvchars;
+    return vals;
+}
+
+int* parseData (char* data, int ndx) {
+    char startmarker = '<';
+    char comma = ',';
+    char endmarker = '>';
+    char c;
+    char wrongdata = 'O';
+    
+    int vals[] = {0, 0}; 
+    int firstcomma = 0;
+    char* str1 = "000";
+ 
+    for (int i = 0; i < ndx; i++)
+    {   
+         //check if the first comma has been found, if it has been then ignore it
+       if (recvchars[i] == comma && firstcomma == 0) {
+               firstcomma = 1;
+          }
+          else if (recvchars[i] == comma && firstcomma == 1)
+        { //if we are here, we are past the identifier character
+            if (recvchars[i] != comma) {
+                 
+            }
+   
+            vals[0] = atoi(recvchars);
+            vals[1] = atoi(recvchars + i + 1);
+            break;
+        }
+     }
 }

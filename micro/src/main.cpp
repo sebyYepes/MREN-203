@@ -65,27 +65,49 @@ void loop()
 
     if (threshold_distance > frontDistance || threshold_distance > leftDistance || threshold_distance > rightDistance)
     {
-        stop(); 
+        stop();
         delay(5000);
     }
 
     t_now = millis();
-    const char* input = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";
+    const char *input = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";
 
     // Perform control update every T milliseconds
     if (t_now - t_last >= T)
     {
-        JsonDocument setSpeed; 
-        DeserializationError error = deserializeJson(setSpeed, json);
-        if (error) {
-          Serial.print(F("deserializeJson() failed: "));
-          Serial.println(error.c_str());
-          return;
+        StaticJsonDocument setSpeed(1024);
+        do
+        {
+            String desiredVelocity = Serial.readStringUntil('\n');
+            desiredVelocity.trim();
+
+
+            DeserializationError error = deserializeJson(setSpeed, desiredVelocity);
+            if (error)
+            {
+                Serial.print(F("deserializeJson() failed: "));
+                Serial.println(error.c_str());
+                return;
+            }
         }
+        // type == 0 for sending pi to arduino
+        while (setSpeed["type"] != 0)
+        {
+            desiredVelocity = Serial.readStringUntil('\n');
+            desiredVelocity.trim();
 
 
-        deserializeJson(setSpeed, input);
-        const char* sensor = doc["sensor"]
+            DeserializationError error = deserializeJson(setSpeed, desiredVelocity);
+            if (error)
+            {
+                Serial.print(F("deserializeJson() failed: "));
+                Serial.println(error.c_str());
+                return;
+            }
+        }
+        Serial.println(setSpeed["trans_speed"]);
+        Serial.println(setSpeed["angular_speed"]);
+        Serial.println(setSpeed["type"]);
 
         // Set the desired vehicle speed and turning rate
         v_d = 0.5;     // [m/s]
