@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 
+void setupMotors();
 void driveVehicle(short u_L, short u_R);
 void decodeEncoderTicks_L();
 void decodeEncoderTicks_R();

@@ -1,51 +1,51 @@
-#include <urmom.h>
+// #include <motor.h>
 #include <ir.h>
-#include <Speedcontroller.h>
+#include <motors.h>
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-// Motor PWM command variables [0-255]
-short u_L = 0;
-short u_R = 0;
+// // Motor PWM command variables [0-255]
+// short u_L = 0;
+// short u_R = 0;
 
-// Counter to keep track of encoder ticks [integer]
-volatile long encoder_ticks_L = 0;
-volatile long encoder_ticks_R = 0;
+// // Counter to keep track of encoder ticks [integer]
+// volatile long encoder_ticks_L = 0;
+// volatile long encoder_ticks_R = 0;
 
-// Variables to store estimated angular rates of wheels [rad/s]
-double omega_L = 0.0;
-double omega_R = 0.0;
+// // Variables to store estimated angular rates of wheels [rad/s]
+// double omega_L = 0.0;
+// double omega_R = 0.0;
 
-// Variables to store estimated wheel speeds [m/s]
-double v_L = 0.0;
-double v_R = 0.0;
+// // Variables to store estimated wheel speeds [m/s]
+// double v_L = 0.0;
+// double v_R = 0.0;
 
-// Variables to store vehicle speed and turning rate
-double v = 0.0;     // [m/s]
-double omega = 0.0; // [rad/s]
+// // Variables to store vehicle speed and turning rate
+// double v = 0.0;     // [m/s]
+// double omega = 0.0; // [rad/s]
 
-// Variables to store desired vehicle speed and turning rate
-double v_d = 0.0;     // [m/s]
-double omega_d = 0.0; // [rad/s]
+// // Variables to store desired vehicle speed and turning rate
+// double v_d = 0.0;     // [m/s]
+// double omega_d = 0.0; // [rad/s]
 
-// Variable to store desired wheel speeds [m/s]
-double v_Ld = 0.0;
-double v_Rd = 0.0;
+// // Variable to store desired wheel speeds [m/s]
+// double v_Ld = 0.0;
+// double v_Rd = 0.0;
 
-// Counters for milliseconds during interval
-long t_now = 0;
-long t_last = 0;
+// // Counters for milliseconds during interval
+// long t_now = 0;
+// long t_last = 0;
 
-// Variables to store errors for controller
-double e_L = 0.0;
-double e_R = 0.0;
-double e_Lint = 0.0;
-double e_Rint = 0.0;
+// // Variables to store errors for controller
+// double e_L = 0.0;
+// double e_R = 0.0;
+// double e_Lint = 0.0;
+// double e_Rint = 0.0;
 
-const double KP = 150.0; // Proportional gain
-const double KI = 200.0; // Integral gain
+// const double KP = 150.0; // Proportional gain
+// const double KI = 200.0; // Integral gain
 
-const double T = 0.1; //[s]
+// const double T = 0.1; //[s]
 
 void setup()
 {
