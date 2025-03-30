@@ -53,9 +53,9 @@ void setup()
     Serial.begin(115200);
     Serial.println("Testing motors...");
 
-    moveForward(150);
-    delay(3000);
-    stop();
+    //moveForward(150);
+    //delay(3000);
+    //stop();
 }
 
 void loop()
