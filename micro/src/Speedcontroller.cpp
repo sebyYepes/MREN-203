@@ -1,6 +1,6 @@
-#include Speedcontroller.h
+#include <Speedcontroller.h>
 
-// Left wheel PWM control
+/* // Left wheel PWM control
 int EB = 9; // Wheel PWM pin (must be a PWM pin)
 int I3 = 8; // Wheel direction digital pin 1
 int I4 = 10; // Wheel direction digital pin 2
@@ -33,7 +33,7 @@ const int T = 100;
 // Controller gains (use the same values for both wheels)
 const double KP = 150.0; // Proportional gain
 const double KI = 0.0; // Integral gain
-
+*/
 /* VARIABLE DECLARATIONS */
 
 // Motor PWM command variables [0-255]

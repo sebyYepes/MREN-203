@@ -3,7 +3,6 @@
 #include <Speedcontroller.h>
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <communication.cpp>
 
 // Motor PWM command variables [0-255]
 short u_L = 0;
@@ -46,6 +45,8 @@ double e_Rint = 0.0;
 const double KP = 150.0; // Proportional gain
 const double KI = 200.0; // Integral gain
 
+const double T = 0.1; //[s]
+
 void setup()
 {
     setupMotors();
@@ -70,12 +71,11 @@ void loop()
     }
 
     t_now = millis();
-    const char *input = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";
 
     // Perform control update every T milliseconds
     if (t_now - t_last >= T)
     {
-        StaticJsonDocument setSpeed(1024);
+        StaticJsonDocument<1024> setSpeed;
         do
         {
             String desiredVelocity = Serial.readStringUntil('\n');
@@ -91,23 +91,11 @@ void loop()
             }
         }
         // type == 0 for sending pi to arduino
-        while (setSpeed["type"] != 0)
-        {
-            desiredVelocity = Serial.readStringUntil('\n');
-            desiredVelocity.trim();
-
-
-            DeserializationError error = deserializeJson(setSpeed, desiredVelocity);
-            if (error)
-            {
-                Serial.print(F("deserializeJson() failed: "));
-                Serial.println(error.c_str());
-                return;
-            }
-        }
-        Serial.println(setSpeed["trans_speed"]);
-        Serial.println(setSpeed["angular_speed"]);
-        Serial.println(setSpeed["type"]);
+        while (setSpeed["type"].as<float>() != 0);
+        
+        Serial.println(setSpeed["trans_speed"].as<float>());
+        Serial.println(setSpeed["angular_speed"].as<float>());
+        Serial.println(setSpeed["type"].as<float>());
 
         // Set the desired vehicle speed and turning rate
         v_d = 0.5;     // [m/s]
