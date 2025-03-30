@@ -224,9 +224,9 @@ short PI_controller(double e_now, double e_int, double k_P, double k_I)
     return u;
 }
 
-void setSpeed(int v_d, int omega_w, long* t_last_ptr, long t_now) {
+void setSpeed(int vd, int omegad, long* t_last_ptr, long t_now) {
     StaticJsonDocument<1024> setSpeed;
-    do
+    /* do
     {
         String desiredVelocity = Serial.readStringUntil('\n');
         desiredVelocity.trim();
@@ -246,10 +246,11 @@ void setSpeed(int v_d, int omega_w, long* t_last_ptr, long t_now) {
     Serial.println(setSpeed["trans_speed"].as<float>());
     Serial.println(setSpeed["angular_speed"].as<float>());
     Serial.println(setSpeed["type"].as<float>());
-
+*/
+int t_last = *t_last_ptr;
     // Set the desired vehicle speed and turning rate
-    v_d = v_d;     // [m/s]
-    omega_d = omega_d; // [rad/s]
+    v_d = vd;     // [m/s]
+    omega_d = omegad; // [rad/s]
 
     // Estimate the rotational speed of each wheel [rad/s]
     omega_L = compute_wheel_rate(encoder_ticks_L, (double)(t_now - t_last));
@@ -309,5 +310,5 @@ void setSpeed(int v_d, int omega_w, long* t_last_ptr, long t_now) {
     Serial.print(",");
     Serial.print("u_R:");
     Serial.print(u_R);
-    Serial.print("\n")
+    Serial.print("\n");
 }
