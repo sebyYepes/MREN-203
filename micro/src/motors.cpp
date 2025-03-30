@@ -7,7 +7,7 @@ const byte SIGNAL_AL = 11; // green wire
 const byte SIGNAL_BL = 12; // yellow wire
 
 // Right wheel encoder digital pins
-const byte SIGNAL_AR = 6;  // green wire
+const byte SIGNAL_AR = 6; // green wire
 const byte SIGNAL_BR = 5; // yellow wire
 
 // Wheel PWM pin (must be a PWM pin)
@@ -33,14 +33,13 @@ const int T = 100;
 
 // Controller gains (use the same values for both wheels)
 const double KP = 150.0; // Proportional gain
-const double KI = 0.0; // Integral gain
+const double KI = 0.0;   // Integral gain
 
 /* VARIABLE DECLARATIONS */
 
 // Motor PWM command variables [0-255]
 short u_L = 0;
 short u_R = 0;
-
 
 // Counter to keep track of encoder ticks [integer]
 volatile long encoder_ticks_L = 0;
@@ -76,22 +75,20 @@ double e_R = 0.0;
 double e_Lint = 0.0;
 double e_Rint = 0.0;
 
-
-
 // Motor PWM command variable [0-255]
 byte u = 0;
- 
-void setupMotors() {
-  // put your setup code here, to run once:
-  
+
+void setupMotors()
+{
+    // put your setup code here, to run once:
+
     // Configure digital pins for output
     pinMode(EA, OUTPUT);
-    pinMode(I1, OUTPUT); 
+    pinMode(I1, OUTPUT);
     pinMode(I2, OUTPUT);
     pinMode(EB, OUTPUT);
     pinMode(I3, OUTPUT);
     pinMode(I4, OUTPUT);
-
 }
 
 void driveVehicle(short u_L, short u_R)
@@ -194,7 +191,7 @@ double compute_vehicle_rate(double v_L, double v_R)
 double compute_L_wheel_speed(double v, double omega)
 {
     double v_wheel = 0.0;
-    v_wheel = v - (ELL * omega) / 2.0 ;
+    v_wheel = v - (ELL * omega) / 2.0;
     return v_wheel;
 }
 
@@ -202,7 +199,7 @@ double compute_L_wheel_speed(double v, double omega)
 double compute_R_wheel_speed(double v, double omega)
 {
     double v_wheel = 0.0;
-    v_wheel = v + (ELL * omega) / 2.0 ;
+    v_wheel = v + (ELL * omega) / 2.0;
     return v_wheel;
 }
 
@@ -224,13 +221,15 @@ short PI_controller(double e_now, double e_int, double k_P, double k_I)
     return u;
 }
 
-void setSpeed(int vd, int omegad, long* t_last_ptr, long t_now) {
+void setSpeed(int vd, int omegad, long *t_last_ptr, long t_now)
+{
+
+    // this is to recieve data from the pi and use that to actuate the motors.
     StaticJsonDocument<1024> setSpeed;
-    /* do
+    do
     {
         String desiredVelocity = Serial.readStringUntil('\n');
         desiredVelocity.trim();
-
 
         DeserializationError error = deserializeJson(setSpeed, desiredVelocity);
         if (error)
@@ -239,18 +238,16 @@ void setSpeed(int vd, int omegad, long* t_last_ptr, long t_now) {
             Serial.println(error.c_str());
             return;
         }
-    }
-    // type == 0 for sending pi to arduino
-    while (setSpeed["type"].as<float>() != 0);
-    
+    } while (setSpeed["type"].as<float>() != 0);
+
     Serial.println(setSpeed["trans_speed"].as<float>());
     Serial.println(setSpeed["angular_speed"].as<float>());
     Serial.println(setSpeed["type"].as<float>());
-*/
-int t_last = *t_last_ptr;
+
+    int t_last = *t_last_ptr;
     // Set the desired vehicle speed and turning rate
-    v_d = vd;     // [m/s]
-    omega_d = omegad; // [rad/s]
+    v_d = setSpeed["trans_speed"].as<float>();       // [m/s]
+    omega_d = setSpeed["angular_speed"].as<float>(); // [rad/s]
 
     // Estimate the rotational speed of each wheel [rad/s]
     omega_L = compute_wheel_rate(encoder_ticks_L, (double)(t_now - t_last));
@@ -260,11 +257,19 @@ int t_last = *t_last_ptr;
     v_L = compute_wheel_speed(omega_L);
     v_R = compute_wheel_speed(omega_R);
 
+
     // Compute the speed of the vehicle [m/s]
     v = compute_vehicle_speed(v_L, v_R);
-
+    
     // Compute the turning rate of the vehicle [rad/s]
     omega = compute_vehicle_rate(v_L, v_R);
+    
+    //now we need to send the data that we got to odom 
+    JsonDocument odomData;
+    odomData["type"] = 1;
+    odomData["trans_v"] = v;
+    odomData["angular_v"] = omega;
+    serializeJson(odomData, Serial);
 
     // Record the current time [ms]
     *t_last_ptr = t_now;
