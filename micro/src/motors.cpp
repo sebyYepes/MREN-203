@@ -230,7 +230,7 @@ void setSpeed(long *t_last_ptr, long t_now)
     static String inputLine = ""; // Initialize an empty string to store the input line
 
     // Check if data is available in the serial buffer
-    while (1)
+    /* while (1)
     {
         if (Serial.available() > 0)
         {
@@ -253,16 +253,20 @@ void setSpeed(long *t_last_ptr, long t_now)
                 inputLine += incomingByte;
             }
         }
-    }
+    } */
+    String input = Serial.readStringUntil('\n');
+    Serial.println(input);
+    Serial.flush();
+    delay(100);
 
-    DeserializationError error = deserializeJson(setSpeed, inputLine);
+    DeserializationError error = deserializeJson(setSpeed, input);
     if (error)
     {
-        //Serial.print(F("deserializeJson() failed: "));
-        //Serial.println(error.c_str());
+        Serial.print(F("deserializeJson() failed: "));
+        Serial.println(error.c_str());
         return;
     }
-
+   // Serial.flush();
 /*    Serial.println(setSpeed["trans_v"].as<float>());
     Serial.println(setSpeed["angular_v"].as<float>());
     Serial.println(setSpeed["type"].as<float>());
