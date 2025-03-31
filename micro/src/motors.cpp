@@ -221,47 +221,46 @@ short PI_controller(double e_now, double e_int, double k_P, double k_I)
     return u;
 }
 
-void setSpeed(int vd, int omegad, long *t_last_ptr, long t_now)
+void setSpeed(long *t_last_ptr, long t_now)
 {
 
-    // this is to recieve data from the pi and use that to actuate the motors.
-	StaticJsonDocument<500> setSpeed;
-//	char c  = ((char)Serial.read());
-   static String inputLine = "";  // Initialize an empty string to store the input line
-  
-  // Check if data is available in the serial buffer
-while (1) {
-  if (Serial.available() > 0) {
-    char incomingByte = Serial.read();  // Read the incoming byte
-    
-    if (incomingByte == '\n' || incomingByte == '\r' || incomingByte == '|') {
-      // When a newline or carriage return is detected, process the line
-      if (inputLine.length() > 0) {
-        Serial.println("You entered: " + inputLine);  // Print the entered line
-//        inputLine = "";  // Clear the string for the next line
-	break;
-      }
-    } else {
-      // Add the character to the input string
-      inputLine += incomingByte;
-    }
-  }
-}
-//  String desiredVelocity = Serial.readStringUntil('}');
-//desiredVelocity += "}"; // Ensure the closing brace is there
-//String desiredVelocity = Serial.readStringUntil('\n');
-        //desiredVelocity.trim();
-	//Serial.println(desiredVelocity);
-//Serial.println("Full JSON Received: " + desiredVelocity);
+    // this is to recieve data from the pi and use that to provide v_d, and omega_d
+    StaticJsonDocument<500> setSpeed;
 
-delay(100);
-        DeserializationError error = deserializeJson(setSpeed, inputLine);
-        if (error)
+    static String inputLine = ""; // Initialize an empty string to store the input line
+
+    // Check if data is available in the serial buffer
+    while (1)
+    {
+        if (Serial.available() > 0)
         {
-            Serial.print(F("deserializeJson() failed: "));
-            Serial.println(error.c_str());
-            return;
+            char incomingByte = Serial.read(); // Read the incoming byte
+
+            if (incomingByte == '\n' || incomingByte == '\r' || incomingByte == '|')
+            {
+                // When a newline or carriage return is detected, process the line
+                if (inputLine.length() > 0)
+                {
+                    Serial.println("You entered: " + inputLine); // Print the entered line
+
+                    break;
+                }
+            }
+            else
+            {
+                // Add the character to the input string
+                inputLine += incomingByte;
+            }
         }
+    }
+
+    DeserializationError error = deserializeJson(setSpeed, inputLine);
+    if (error)
+    {
+        Serial.print(F("deserializeJson() failed: "));
+        Serial.println(error.c_str());
+        return;
+    }
 
     Serial.println(setSpeed["trans_v"].as<float>());
     Serial.println(setSpeed["angular_v"].as<float>());
@@ -280,15 +279,14 @@ delay(100);
     v_L = compute_wheel_speed(omega_L);
     v_R = compute_wheel_speed(omega_R);
 
-
     // Compute the speed of the vehicle [m/s]
     v = compute_vehicle_speed(v_L, v_R);
-    
+
     // Compute the turning rate of the vehicle [rad/s]
     omega = compute_vehicle_rate(v_L, v_R);
-    
-    //now we need to send the data that we got to odom 
-    JsonDocument odomData;
+
+    // now we need to send the data that we got to odom
+    StaticJsonDocument<500> odomData;
     odomData["type"] = 1;
     odomData["trans_v"] = v;
     odomData["angular_v"] = omega;
@@ -325,19 +323,19 @@ delay(100);
 
     // Drive the vehicle
     driveVehicle(u_L, u_R);
-/*
-    // Print some stuff to the serial monitor (or plotter)
-    Serial.print("Vehicle_speed_[m/s]:");
-    Serial.print(v);
-    Serial.print(",");
-    Serial.print("Turning_rate_[rad/s]:");
-    Serial.print(omega);
-    Serial.print(",");
-    Serial.print("u_L:");
-    Serial.print(u_L);
-    Serial.print(",");
-    Serial.print("u_R:");
-    Serial.print(u_R);
-    Serial.print("\n");
-*/
+    /*
+        // Print some stuff to the serial monitor (or plotter)
+        Serial.print("Vehicle_speed_[m/s]:");
+        Serial.print(v);
+        Serial.print(",");
+        Serial.print("Turning_rate_[rad/s]:");
+        Serial.print(omega);
+        Serial.print(",");
+        Serial.print("u_L:");
+        Serial.print(u_L);
+        Serial.print(",");
+        Serial.print("u_R:");
+        Serial.print(u_R);
+        Serial.print("\n");
+    */
 }
