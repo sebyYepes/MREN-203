@@ -225,23 +225,46 @@ void setSpeed(int vd, int omegad, long *t_last_ptr, long t_now)
 {
 
     // this is to recieve data from the pi and use that to actuate the motors.
-    StaticJsonDocument<1024> setSpeed;
-    do
-    {
-        String desiredVelocity = Serial.readStringUntil('\n');
-        desiredVelocity.trim();
+	StaticJsonDocument<500> setSpeed;
+//	char c  = ((char)Serial.read());
+   static String inputLine = "";  // Initialize an empty string to store the input line
+  
+  // Check if data is available in the serial buffer
+while (1) {
+  if (Serial.available() > 0) {
+    char incomingByte = Serial.read();  // Read the incoming byte
+    
+    if (incomingByte == '\n' || incomingByte == '\r' || incomingByte == '|') {
+      // When a newline or carriage return is detected, process the line
+      if (inputLine.length() > 0) {
+        Serial.println("You entered: " + inputLine);  // Print the entered line
+//        inputLine = "";  // Clear the string for the next line
+	break;
+      }
+    } else {
+      // Add the character to the input string
+      inputLine += incomingByte;
+    }
+  }
+}
+//  String desiredVelocity = Serial.readStringUntil('}');
+//desiredVelocity += "}"; // Ensure the closing brace is there
+//String desiredVelocity = Serial.readStringUntil('\n');
+        //desiredVelocity.trim();
+	//Serial.println(desiredVelocity);
+//Serial.println("Full JSON Received: " + desiredVelocity);
 
-        DeserializationError error = deserializeJson(setSpeed, desiredVelocity);
+delay(100);
+        DeserializationError error = deserializeJson(setSpeed, inputLine);
         if (error)
         {
             Serial.print(F("deserializeJson() failed: "));
             Serial.println(error.c_str());
             return;
         }
-    } while (setSpeed["type"].as<float>() != 0);
 
-    Serial.println(setSpeed["trans_speed"].as<float>());
-    Serial.println(setSpeed["angular_speed"].as<float>());
+    Serial.println(setSpeed["trans_v"].as<float>());
+    Serial.println(setSpeed["angular_v"].as<float>());
     Serial.println(setSpeed["type"].as<float>());
 
     int t_last = *t_last_ptr;
@@ -302,7 +325,7 @@ void setSpeed(int vd, int omegad, long *t_last_ptr, long t_now)
 
     // Drive the vehicle
     driveVehicle(u_L, u_R);
-
+/*
     // Print some stuff to the serial monitor (or plotter)
     Serial.print("Vehicle_speed_[m/s]:");
     Serial.print(v);
@@ -316,4 +339,5 @@ void setSpeed(int vd, int omegad, long *t_last_ptr, long t_now)
     Serial.print("u_R:");
     Serial.print(u_R);
     Serial.print("\n");
+*/
 }
