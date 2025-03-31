@@ -241,8 +241,9 @@ void setSpeed(long *t_last_ptr, long t_now)
                 // When a newline or carriage return is detected, process the line
                 if (inputLine.length() > 0)
                 {
-                    Serial.println("You entered: " + inputLine); // Print the entered line
-
+                    Serial.println(inputLine); // Print the entered line
+		    Serial.flush();
+	            inputLine = "";
                     break;
                 }
             }
@@ -257,15 +258,15 @@ void setSpeed(long *t_last_ptr, long t_now)
     DeserializationError error = deserializeJson(setSpeed, inputLine);
     if (error)
     {
-        Serial.print(F("deserializeJson() failed: "));
-        Serial.println(error.c_str());
+        //Serial.print(F("deserializeJson() failed: "));
+        //Serial.println(error.c_str());
         return;
     }
 
-    Serial.println(setSpeed["trans_v"].as<float>());
+/*    Serial.println(setSpeed["trans_v"].as<float>());
     Serial.println(setSpeed["angular_v"].as<float>());
     Serial.println(setSpeed["type"].as<float>());
-
+*/
     int t_last = *t_last_ptr;
     // Set the desired vehicle speed and turning rate
     v_d = setSpeed["trans_speed"].as<float>();       // [m/s]

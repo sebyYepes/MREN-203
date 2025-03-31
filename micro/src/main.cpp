@@ -71,11 +71,10 @@ void loop()
     }
 
     t_curr = millis();
-
     // Perform control update every T milliseconds
     if (t_curr - t_prev  >= T)
     {
-	setSpeed(0.5, 0.5, &t_prev, t_curr);
+	setSpeed(&t_prev, t_curr);
 	t_prev  = t_curr; 
-        }
+        } 
 }
